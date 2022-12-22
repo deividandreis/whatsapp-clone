@@ -1,9 +1,9 @@
 import React from "react";
 import "./ChatListItem.css";
 
-const ChatListItem = () => {
+const ChatListItem = ({onClick, active}) => {
   return (
-    <div className="chatListItem">
+    <div className={`chatListItem ${active ? "active" : ""}`} onClick={onClick}>
       <img
         className="chatListItem-avatar"
         src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -17,7 +17,7 @@ const ChatListItem = () => {
         </div>
         <div className="chatListItem-line">
           <div className="chatListItem-lastMsg">
-            <p>ola</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim molestiae totam nam sed illum amet assumenda soluta facilis ad. Id, aut. Accusamus aliquam, omnis fuga possimus dolorem impedit ipsam repudiandae.</p>
           </div>
         </div>
       </div>
