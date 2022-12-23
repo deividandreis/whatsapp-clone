@@ -15,25 +15,25 @@ function App() {
     {
       chatId: 1,
       title: "fulano",
-      image:
+      avatar:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
     },
     {
       chatId: 2,
       title: "fulano",
-      image:
+      avatar:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
     },
     {
       chatId: 3,
       title: "fulano",
-      image:
+      avatar:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
     },
     {
       chatId: 4,
       title: "fulano",
-      image:
+      avatar:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
     },
   ]);
@@ -76,6 +76,7 @@ function App() {
             <ChatListItem
               key={key}
               onClick={() => setActiveChat(chatList[key])}
+              data={item}
               active={activeChat.chatId === chatList[key].chatId}
             />
           ))}
