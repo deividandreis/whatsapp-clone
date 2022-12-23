@@ -12,8 +12,16 @@ import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
 
 const ChatWindow = () => {
+  let recognition = null;
+  let SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRecognition !== undefined) {
+    recognition = new SpeechRecognition();
+  }
+
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [text, setText] = useState("");
+  const [listening, setListening] = useState(false);
 
   const handleEmojiClick = (e, emojiObject) => {
     setText(text + e.emoji);
@@ -26,6 +34,24 @@ const ChatWindow = () => {
   const handleCloseEmoji = () => {
     setEmojiOpen(false);
   };
+
+  const handleMicClick = () => {
+    if (recognition !== null) {
+      recognition.onstart = () => {
+        setListening(true);
+      };
+      { recognition.onend = () => {
+          setListening(false);
+        };
+        recognition.onresult = (e) => {
+          setText(e.results[0], [0].transcript);
+        };
+        recognition.start();
+      }
+    }
+  };
+
+  const handleSendClick = () => {};
 
   return (
     <div className="chatWindow">
@@ -87,9 +113,16 @@ const ChatWindow = () => {
           />
         </div>
         <div className="chatWindow-pos">
-          <div className="chatWindow-btn">
-            <SendIcon style={{ color: "#919191" }} />
-          </div>
+          {text === "" && (
+            <div className="chatWindow-btn" onClick={handleMicClick}>
+              <MicIcon style={{ color: listening ? "#126ece" : "#919191" }} />
+            </div>
+          )}
+          {text !== "" && (
+            <div className="chatWindow-btn" onClick={handleSendClick}>
+              <SendIcon style={{ color: "#919191" }} />
+            </div>
+          )}
         </div>
       </div>
     </div>
