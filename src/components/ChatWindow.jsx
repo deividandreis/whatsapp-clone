@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import EmojiPicker from "emoji-picker-react";
 
 import "./ChatWindow.css";
+
+import MessageItem from "./MessageItem";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -11,7 +13,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
 
-const ChatWindow = () => {
+const ChatWindow = ({user}) => {
+
+  const body = useRef()
+
   let recognition = null;
   let SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -22,6 +27,110 @@ const ChatWindow = () => {
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
+  const [list, setList] = useState([
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+    {autor: 123, body: "bla bla bla"},
+    {autor: 123, body: "bla bla"},
+    {autor: 1234, body: "bla"},
+  ]);
+
+  useEffect(() => {
+    if(body.current.scrollHeight > body.current.offsetHeight){
+      body.current.scrollTop = body.current.scrollHeight - body.current.offsetHeight
+    }
+  }, [list]);
 
   const handleEmojiClick = (e, emojiObject) => {
     setText(text + e.emoji);
@@ -40,7 +149,8 @@ const ChatWindow = () => {
       recognition.onstart = () => {
         setListening(true);
       };
-      { recognition.onend = () => {
+      {
+        recognition.onend = () => {
           setListening(false);
         };
         recognition.onresult = (e) => {
@@ -76,7 +186,11 @@ const ChatWindow = () => {
           </div>
         </div>
       </div>
-      <div className="chatWindow-body"></div>
+      <div className="chatWindow-body" ref={body}>
+        {list.map((item, key) => (
+          <MessageItem key={key} data={item} user={user}/>
+        ))}
+      </div>
 
       <div
         className="chatWindow-emojiarea"

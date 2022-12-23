@@ -11,6 +11,14 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
 
 function App() {
+  
+  const [user, setUser] = useState(
+    {
+      id: 1234,
+      avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+      name: "dvd"
+    }
+  )
   const [chatList, setChatList] = useState([
     {
       chatId: 1,
@@ -45,7 +53,7 @@ function App() {
         <header>
           <img
             className="header-avatar"
-            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+            src={user.avatar}
             alt="avatar"
           />
           <div className="header-buttons">
@@ -83,7 +91,7 @@ function App() {
         </div>
       </div>
       <div className="contentarea">
-        {activeChat.chatId !== undefined && <ChatWindow />}
+        {activeChat.chatId !== undefined && <ChatWindow user={user}/>}
         {activeChat.chatId === undefined && <ChatIntro />}
       </div>
     </div>
