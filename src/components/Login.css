@@ -1,0 +1,20 @@
+.login {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(10deg, #1c315e, #227c70, #88a47c, #e6e2c3);
+}
+
+.login button {
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bolder;
+  height: 60px;
+  width: 300px;
+  border-radius: 35px;
+  border: none;
+  background: linear-gradient(30deg, #0a2647, #144272, #205295, #2c74b3);
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.6);
+  color: white;
+}
