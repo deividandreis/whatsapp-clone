@@ -15,34 +15,16 @@ import SearchIcon from "@mui/icons-material/Search";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [chatList, setChatList] = useState([
-    {
-      chatId: 1,
-      title: "fulano",
-      avatar:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    },
-    {
-      chatId: 2,
-      title: "fulano",
-      avatar:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    },
-    {
-      chatId: 3,
-      title: "fulano",
-      avatar:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    },
-    {
-      chatId: 4,
-      title: "fulano",
-      avatar:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    },
-  ]);
+  const [chatList, setChatList] = useState([]);
   const [activeChat, setActiveChat] = useState({});
   const [showNewChat, setShowNewChat] = useState(false);
+
+  useEffect(() => {
+     if(user !== null){
+      let unsub = Api.onChatList(user.id, setChatList)
+      return unsub 
+     }
+  }, [user]);
 
   const handleNewChat = () => {
     setShowNewChat(true);
@@ -85,7 +67,6 @@ function App() {
             </div>
           </div>
         </header>
-
         <div className="search">
           <div className="search-input">
             <SearchIcon fontSize="small" style={{ color: "#919191" }} />
@@ -95,7 +76,6 @@ function App() {
             />
           </div>
         </div>
-
         <div className="chatlist">
           {chatList.map((item, key) => (
             <ChatListItem
@@ -108,7 +88,8 @@ function App() {
         </div>
       </div>
       <div className="contentarea">
-        {activeChat.chatId !== undefined && <ChatWindow user={user} />}
+        {activeChat.chatId !== undefined && <ChatWindow user={user} 
+        data={activeChat}/>}
         {activeChat.chatId === undefined && <ChatIntro />}
       </div>
     </div>

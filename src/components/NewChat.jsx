@@ -1,39 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./NewChat.css";
+
+import Api from "../api";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const NewChat = ({ user, cahtList, show, setShow }) => {
-  const [list, setList] = useState([
-    {
-      id: 123,
-      avatar:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nome: "Deivid",
-    },
-    {
-      id: 123,
-      avatar:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nome: "Deivid",
-    },
-    {
-      id: 123,
-      avatar:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nome: "Deivid",
-    },
-    {
-      id: 123,
-      avatar:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nome: "Deivid",
-    },
-  ]);
+  
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    const getList = async () => {
+      if (user !== null) {
+        let results = await Api.getContactList(user.id);
+        setList(results);
+      }
+    };
+    getList();
+  }, [user]);
 
   const handleClose = () => {
     setShow(false);
   };
+
+  const addNewChat = async (user2) => {
+    await Api.addNewChat(user, user2);
+
+    handleClose();
+  };
+
   return (
     <div className="newchat" style={{ left: show ? 0 : -415 }}>
       <div className="newChat-head">
@@ -42,12 +37,14 @@ const NewChat = ({ user, cahtList, show, setShow }) => {
         </div>
         <div className="newChat-headtitle">Nova Conversa</div>
       </div>
-
       <div className="newChat-list">
         {list.map((item, key) => (
-          <div className="newChat-item" key={key}>
+          <div
+            className="newChat-item"
+            onClick={() => addNewChat(item)}
+            key={key}>
             <img className="newChat-itemavatar" src={item.avatar} />
-            <div className="newChat-itemname">{item.nome}</div>
+            <div className="newChat-itemname">{item.name}</div>
           </div>
         ))}
       </div>

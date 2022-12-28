@@ -4,6 +4,7 @@ import EmojiPicker from "emoji-picker-react";
 import "./ChatWindow.css";
 
 import MessageItem from "./MessageItem";
+import Api from "../api";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -13,9 +14,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
 
-const ChatWindow = ({user}) => {
-
-  const body = useRef()
+const ChatWindow = ({ user, data }) => {
+  const body = useRef();
 
   let recognition = null;
   let SpeechRecognition =
@@ -27,108 +27,19 @@ const ChatWindow = ({user}) => {
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
-  const [list, setList] = useState([
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-    {autor: 123, body: "bla bla bla"},
-    {autor: 123, body: "bla bla"},
-    {autor: 1234, body: "bla"},
-  ]);
+  const [list, setList] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    if(body.current.scrollHeight > body.current.offsetHeight){
-      body.current.scrollTop = body.current.scrollHeight - body.current.offsetHeight
+    setList([]);
+    let unsub = Api.onChatContent(data.chatId, setList, setUsers);
+    return unsub;
+  }, [data.chatId]);
+
+  useEffect(() => {
+    if (body.current.scrollHeight > body.current.offsetHeight) {
+      body.current.scrollTop =
+        body.current.scrollHeight - body.current.offsetHeight;
     }
   }, [list]);
 
@@ -161,18 +72,26 @@ const ChatWindow = ({user}) => {
     }
   };
 
-  const handleSendClick = () => {};
+  const handleInputKeyUp = (e) => {
+    if (e.keyCode == 13) {
+      handleSendClick();
+    }
+  };
+
+  const handleSendClick = () => {
+    if (text !== "") {
+      Api.sendMessage(data, user.id, "text", text, users);
+      setText("");
+      setEmojiOpen(false);
+    }
+  };
 
   return (
     <div className="chatWindow">
       <div className="chatWindow-header">
         <div className="chatWindow-headerinfo">
-          <img
-            className="chatWindow-avatar"
-            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-            alt=""
-          />
-          <div className="chatWindow-name">Deivid</div>
+          <img className="chatWindow-avatar" src={data.image} />
+          <div className="chatWindow-name">{data.title}</div>
         </div>
         <div className="chatWindow-headerbuttons">
           <div className="chatWindow-btn">
@@ -188,10 +107,9 @@ const ChatWindow = ({user}) => {
       </div>
       <div className="chatWindow-body" ref={body}>
         {list.map((item, key) => (
-          <MessageItem key={key} data={item} user={user}/>
+          <MessageItem key={key} data={item} user={user} />
         ))}
       </div>
-
       <div
         className="chatWindow-emojiarea"
         style={{ height: emojiOpen ? "400px" : "0px" }}>
@@ -202,7 +120,6 @@ const ChatWindow = ({user}) => {
           width="100%"
         />
       </div>
-
       <div className="chatWindow-footer">
         <div className="chatWindow-pre">
           <div
@@ -224,6 +141,7 @@ const ChatWindow = ({user}) => {
             placeholder="Digite uma mensagem"
             value={text}
             onChange={(e) => setText(e.target.value)}
+            onKeyUp={handleInputKeyUp}
           />
         </div>
         <div className="chatWindow-pos">
